@@ -25,24 +25,30 @@
 					"enabled": true
 				}
 			],
-			"url": "http://localhost:8000/api/gists/13fe7dc2722a08797c79440d9a621752/comments",
+			"url": "http://localhost:8000/api/gists/:id/comments",
 			"queryParams": [],
-			"pathVariables": {},
-			"pathVariableData": [],
 			"preRequestScript": null,
+			"pathVariables": {
+				"id": ""
+			},
+			"pathVariableData": [
+				{
+					"key": "id",
+					"value": ""
+				}
+			],
 			"method": "GET",
-			"collectionId": "427a2b2a-4154-a5b1-2345-ecde49aa7ebc",
 			"data": null,
 			"dataMode": "params",
-			"name": "GistComments",
-			"description": "",
-			"descriptionFormat": "html",
-			"time": 1524334642429,
 			"version": 2,
-			"responses": [],
 			"tests": null,
 			"currentHelper": "normal",
-			"helperAttributes": {}
+			"helperAttributes": {},
+			"time": 1524336213198,
+			"name": "GistComments",
+			"description": "",
+			"collectionId": "427a2b2a-4154-a5b1-2345-ecde49aa7ebc",
+			"responses": []
 		},
 		{
 			"id": "5350d519-19df-0386-17db-27c34b252864",
