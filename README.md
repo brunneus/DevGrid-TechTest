@@ -6,5 +6,5 @@
 
 3 - 'npm start' to start the application.
 
-# Test
+# Run Tests
 In order to executed the tests, run 'npm test'.
