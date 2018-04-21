@@ -3,13 +3,17 @@ const { validator, checker } = require('./utils/functional-utils');
 
 const scoreValidator = score => {
     const playerNumberValidator = validator('Player should be a number', ({ player }) => _.isNumber(player));
+    const playerRangeNumberValidator = validator('Player number should be between 1 and 100', ({ player }) => player >= 1 && player <= 100);
     const problemNumberValidator = validator('Problem number should be a number', ({ problemNumber }) => _.isNumber(problemNumber));
+    const problemRangeNumberValidator = validator('Problem number should be between 1 and 9', ({ problemNumber }) => problemNumber >= 1 && problemNumber <= 9);
     const penaltyTimeNumberValidator = validator('Penalty time should be a number', ({ penaltyTime }) => _.isNumber(penaltyTime));
     const problemStatusValidator = validator('Invalid problem status, should be C I R U or E', ({ problemStatus }) => ["C", "I", "R", "U", "E"].some(s => s === problemStatus));
 
     const scoreValidators = [
         playerNumberValidator,
+        playerRangeNumberValidator,
         problemNumberValidator,
+        problemRangeNumberValidator,
         penaltyTimeNumberValidator,
         problemStatusValidator
     ];

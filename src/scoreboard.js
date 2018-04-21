@@ -11,29 +11,37 @@ const ScoreBoard = () => {
     }
 
     const addScore = ({ player, problemNumber, penaltyTime, problemStatus }) => {
-        const problemSolved = problemStatus === "C";
-
-        const penalty = problemSolved
-            ? penaltyTime
-            : penaltyTimes[problemStatus];
-
         const playerAlreadyOnRank = rank.some(pr => pr.player === player);
 
         if (!playerAlreadyOnRank) {
             rank.push({
                 player,
                 problemsSolved: 0,
+                trackingOfSolvedProblems: [0, 0, 0, 0, 0, 0, 0, 0, 0],
                 penaltyTime: 0,
             });
         }
 
         const playerRank = findPlayerRank(player);
 
+        if (problemAlreadySolved(player, problemNumber)) {
+            return;
+        }
+
+        const problemSolved = problemStatus === "C";
+        const penalty = problemSolved
+            ? penaltyTime
+            : penaltyTimes[problemStatus];
+
+        playerRank.penaltyTime += penalty;
+
+        playerRank.trackingOfSolvedProblems[problemNumber - 1] = problemSolved
+            ? 1
+            : 0;
+
         playerRank.problemsSolved = problemSolved
             ? playerRank.problemsSolved + 1
             : playerRank.problemsSolved;
-
-        playerRank.penaltyTime += penalty;
 
         problemSolved
             ? movePlayerUpIfRankIsBetterThanPlayerAbove(player)
@@ -50,20 +58,28 @@ const ScoreBoard = () => {
 
         const playerRank = findPlayerRank(player);
         const playerAbovePosition = playerPosition - 1;
-        const playerAbove = rank[playerAbovePosition];
+        const rankPlayerAbove = rank[playerAbovePosition];
 
-        const playerHasMoreProblemsSolvedThanNext =
-            playerRank.problemsSolved > playerAbove.problemsSolved;
+        const playerHasMoreProblemsSolvedThanPlayerAbove =
+            playerRank.problemsSolved > rankPlayerAbove.problemsSolved;
 
-        const playerHasSameProblemsSolvedButLessPenaltyThanNext =
-            playerRank.problemsSolved === playerAbove.problemsSolved &&
-            playerRank.penaltyTime < playerAbove.penaltyTime;
+        const playerHasSameProblemsSolvedButLessPenaltyThanPlayerAbove =
+            playerRank.problemsSolved === rankPlayerAbove.problemsSolved &&
+            playerRank.penaltyTime < rankPlayerAbove.penaltyTime;
+
+        const playersIsTiedWithAbovePlayerButTeamNumberIsLess =
+            playerRank.problemsSolved === rankPlayerAbove.problemsSolved &&
+            playerRank.penaltyTime === rankPlayerAbove.penaltyTime &&
+            playerRank.player < rankPlayerAbove.player;
 
         const playerHasBetterRankThanPlayerAbove =
-            playerHasMoreProblemsSolvedThanNext || playerHasSameProblemsSolvedButLessPenaltyThanNext;
+            playerHasMoreProblemsSolvedThanPlayerAbove ||
+            playerHasSameProblemsSolvedButLessPenaltyThanPlayerAbove ||
+            playersIsTiedWithAbovePlayerButTeamNumberIsLess;
 
         if (playerHasBetterRankThanPlayerAbove) {
             movePlayerUpOnRank(player);
+            movePlayerUpIfRankIsBetterThanPlayerAbove(player);
         }
     }
 
@@ -81,6 +97,7 @@ const ScoreBoard = () => {
 
         if (playerRank.penaltyTime > playerBellowRank.penaltyTime) {
             movePlayerUpOnRank(playerBellowRank.player);
+            movePlayerDownIfRankIsWorseThanPlayerBellow(player);
         }
     }
 
@@ -96,12 +113,21 @@ const ScoreBoard = () => {
     const findPlayerPosition = player => rank.findIndex(pr => pr.player == player);
 
     const findPlayerRank = player => rank.find(pr => pr.player === player);
-    
+
     const getRank = () => rank.filter(pr => pr.problemsSolved);
+
+    const problemAlreadySolved = (player, problem) => {
+        const playerRank = findPlayerRank(player);
+
+        return playerRank
+            ? playerRank.trackingOfSolvedProblems[problem - 1]
+            : false;
+    };
 
     return {
         addScore,
-        getRank
+        getRank,
+        problemAlreadySolved
     }
 }
 

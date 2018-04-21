@@ -65,6 +65,12 @@ app.use('/api/gists', (req, res, next) => {
 app.post('/api/scoreboard/score', (req, res) => {
     const { player, problemNumber, penaltyTime, problemStatus } = req.body;
 
+    if (scoreBoard.problemAlreadySolved(player, problemNumber)) {
+        res.status(200);
+        res.send({ message: `Problem ${problemNumber} already solved by player ${player}` });
+        return;
+    }
+
     const score = {
         player,
         problemNumber,
@@ -79,8 +85,12 @@ app.post('/api/scoreboard/score', (req, res) => {
 })
 
 app.get('/api/scoreboard/rank', (req, res) => {
+    const rank = scoreBoard
+        .getRank()
+        .map(pr => _.omit(pr, 'trackingOfSolvedProblems'));
+
     res.status(200);
-    res.send(scoreBoard.getRank());
+    res.send(rank);
 })
 
 app.post('/api/gists', (req, res) => {
