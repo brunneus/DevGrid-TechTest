@@ -1,4 +1,4 @@
-# DevgridTechTest
+# DevGridTechTest
 
 1 - 'npm install' to install dependecies.
 
