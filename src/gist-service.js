@@ -18,7 +18,7 @@ const GistService = () => {
         const requestOptions = {
             url: GIST_CREATE_URL,
             json: true,
-                body: gist,
+            body: gist,
             headers: {
                 "Authorization": `token ${token}`,
                 "User-Agent": "DevGridTechTest"
@@ -26,6 +26,10 @@ const GistService = () => {
         };
 
         request.post(requestOptions, (err, response) => {
+            if (err) {
+                return reject(err);
+            }
+
             const { statusCode } = response;
 
             if (statusCode === 401) {

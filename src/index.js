@@ -47,11 +47,11 @@ app.use('/api/gists', (req, res, next) => {
         return next();
     }
 
-    const scoreValidation = gistValidator(req.body);
+    const gistValidation = gistValidator(req.body);
 
-    if (scoreValidation.hasErrors) {
+    if (gistValidation.hasErrors) {
         res.status(400);
-        res.send({ message: scoreValidation.errors });
+        res.send({ message: gistValidation.errors });
         return;
     }
 

@@ -22,8 +22,6 @@ const ScoreBoard = () => {
             });
         }
 
-        const playerRank = findPlayerRank(player);
-
         if (problemAlreadySolved(player, problemNumber)) {
             return;
         }
@@ -33,6 +31,7 @@ const ScoreBoard = () => {
             ? penaltyTime
             : penaltyTimes[problemStatus];
 
+        const playerRank = findPlayerRank(player);
         playerRank.penaltyTime += penalty;
 
         playerRank.trackingOfSolvedProblems[problemNumber - 1] = problemSolved
